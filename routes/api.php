@@ -16,3 +16,23 @@ use Illuminate\Http\Request;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
+
+
+Route::group(['prefix' => 'picture'], function() {
+    //Route::get('', '');
+});
+
+Route::group(['prefix' => 'category'], function() {
+
+});
+
+Route::group(['prefix' => 'directory'], function() {
+
+});
+
+Route::group(['prefix' => 'video'], function() {
+
+});
+
+
+

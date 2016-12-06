@@ -172,11 +172,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        CalvilloComMx\Providers\AppServiceProvider::class,
+        CalvilloComMx\Providers\AuthServiceProvider::class,
+        // CalvilloComMx\Providers\BroadcastServiceProvider::class,
+        CalvilloComMx\Providers\EventServiceProvider::class,
+        CalvilloComMx\Providers\RouteServiceProvider::class,
 
     ],
 
