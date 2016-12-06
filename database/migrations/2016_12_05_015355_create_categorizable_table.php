@@ -16,7 +16,7 @@ class CreateCategorizableTable extends Migration
         Schema::create('categorizables', function(Blueprint $table) {
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('categorizable_id');
-            $table->unsignedInteger('categorizable_type');
+            $table->string('categorizable_type');
             $table->unsignedInteger('priority');
 
             $table->primary([
