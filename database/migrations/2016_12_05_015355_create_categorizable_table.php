@@ -17,7 +17,7 @@ class CreateCategorizableTable extends Migration
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('categorizable_id');
             $table->string('categorizable_type');
-            $table->unsignedInteger('priority');
+            $table->unsignedInteger('priority')->default(0);
 
             $table->primary([
                 'category_id',

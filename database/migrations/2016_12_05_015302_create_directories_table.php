@@ -25,8 +25,8 @@ class CreateDirectoriesTable extends Migration
             $table->string('phone');
             $table->string('cellphone');
             $table->string('website_url');
-            $table->string('youtube');
-            $table->string('facebook');
+            $table->string('youtube_url');
+            $table->string('facebook_url');
             $table->double('latitude');
             $table->double('longitude');
 
