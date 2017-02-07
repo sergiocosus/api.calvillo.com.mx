@@ -19,11 +19,10 @@ Route::get('/user', function (Request $request) {
 
 
 Route::group(['prefix' => 'picture'], function() {
-    //Route::get('', '');
 });
 
 Route::group(['prefix' => 'category'], function() {
-
+    Route::get('{category}', 'CategoryController@get');
 });
 
 Route::group(['prefix' => 'directory'], function() {

@@ -22,8 +22,18 @@ class Directory extends Model
         'longitude',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     public function categories()
     {
         return $this->morphToMany(Category::class, 'categorizable');
+    }
+
+
+    public function getImageUrlAttribute()
+    {
+        return env('APP_URL').'/storage/images/directory/'.$this->image_code;
     }
 }

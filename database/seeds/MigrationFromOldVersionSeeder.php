@@ -5,12 +5,29 @@ use Illuminate\Database\Seeder;
 class MigrationFromOldVersionSeeder extends Seeder
 {
     /**
+     * @var \CalvilloComMx\Core\ImageResizeService
+     */
+    private $imageResizeService;
+
+    /**
+     * MigrationFromOldVersionSeeder constructor.
+     * @param \CalvilloComMx\Core\ImageResizeService $imageResizeService
+     */
+    public function __construct(\CalvilloComMx\Core\ImageResizeService $imageResizeService)
+    {
+        $this->imageResizeService = $imageResizeService;
+    }
+
+
+    /**
      * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
+
+
         $fotos = DB::connection('mysql2')->select('select * from fotos');
         $categorias = DB::connection('mysql2')->select('select * from categorias');
 
@@ -23,11 +40,15 @@ class MigrationFromOldVersionSeeder extends Seeder
             $category->link = strtolower($categoria->link);
             $category->description = $categoria->descripcion;
             $category->created_at = new Carbon\Carbon($categoria->fechaSubida,'America/Mexico_City');
-            $category->title = $categoria->titulo;
             if (!$categoria->visible) {
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
             $category->save();
+
+            Storage::disk('public')->copy(
+                "old_images/Categoria/$categoria->id.$categoria->formato",
+                "images/category/$category->image_code");
+            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
             $categories[] = $category;
         }
 
@@ -60,6 +81,17 @@ class MigrationFromOldVersionSeeder extends Seeder
             }
             $picture->save();
 
+            try {
+                Storage::disk('public')->copy(
+                    "old_images/Foto/$foto->id.$foto->formato",
+                    "images/picture/$picture->image_code");
+                $this->imageResizeService->resize('./storage/app/public/images/picture/'.$picture->image_code);
+
+            } catch (Exception $e) {
+                Log::error($e);
+            }
+
+
             foreach ($categorias as $indexPadre => $categoriaPadre) {
                 if ($categoriaPadre->id == $foto->catID) {
                     $picture->categories()->attach($categories[$indexPadre]->id, [
@@ -72,6 +104,21 @@ class MigrationFromOldVersionSeeder extends Seeder
 
         $this->migrateLocalities();
         $this->migrateDirectories();
+
+        $mainCategory = new \CalvilloComMx\Core\Category();
+        $mainCategory = new \CalvilloComMx\Core\Category();
+        $mainCategory->link = '';
+        $mainCategory->description = '';
+        $mainCategory->title = '';
+        $mainCategory->image_code = '';
+
+        $mainCategory->save();
+
+        $categories = \CalvilloComMx\Core\Category::whereNull('category_id')->get();
+        foreach ($categories as $category) {
+            $category->category()->associate($mainCategory);
+            $category->save();
+        }
 
     }
 
@@ -93,6 +140,12 @@ class MigrationFromOldVersionSeeder extends Seeder
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
             $category->save();
+
+            Storage::disk('public')->copy(
+                "old_images/LocalidadCat/$categoria->id.$categoria->formato",
+                "images/category/$category->image_code");
+            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
+
             $categories[] = $category;
         }
 
@@ -122,6 +175,16 @@ class MigrationFromOldVersionSeeder extends Seeder
             }
             $locality->save();
 
+            try {
+                Storage::disk('public')->copy(
+                    "old_images/Foto/$localidad->id.$localidad->formato",
+                    "images/category/$locality->image_code");
+                $this->imageResizeService->resize('./storage/app/public/images/category/'.$locality->image_code);
+
+            } catch (Exception $e) {
+                Log::error($e);
+            }
+
             foreach ($categorias as $indexPadre => $categoriaPadre) {
                 if ($categoriaPadre->id == $localidad->catId) {
                     $locality->category()->associate($categories[$indexPadre]);
@@ -150,6 +213,12 @@ class MigrationFromOldVersionSeeder extends Seeder
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
             $category->save();
+
+            Storage::disk('public')->copy(
+                "old_images/DirectorioCat/$categoria->id.$categoria->formato",
+                "images/category/$category->image_code");
+            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
+
             $categories[] = $category;
         }
 
@@ -187,6 +256,16 @@ class MigrationFromOldVersionSeeder extends Seeder
                 $directory->deleted_at = \Carbon\Carbon::now() ;
             }
             $directory->save();
+
+            try {
+                Storage::disk('public')->copy(
+                    "old_images/Directorio/$directorio->id.$directorio->formato",
+                    "images/directory/$directory->image_code");
+                $this->imageResizeService->resize('./storage/app/public/images/directory/'.$directory->image_code);
+
+            } catch (Exception $e) {
+                Log::error($e);
+            }
 
             foreach ($categorias as $indexPadre => $categoriaPadre) {
                 if ($categoriaPadre->id == $directorio->catId) {

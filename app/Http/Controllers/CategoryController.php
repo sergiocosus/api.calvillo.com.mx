@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function getLink(Category $category)
+    public function get(Category $category)
     {
         $category->load([
+            'category',
             'categories',
             'pictures',
             'videos',
             'directories'
         ]);
 
-        $this->success(compact('category'));
+        return $this->success(compact('category'));
     }
 }

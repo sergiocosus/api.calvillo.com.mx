@@ -14,6 +14,10 @@ class Category extends Model
         'priority',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     public function category() {
         return $this->belongsTo(Category::class);
     }
@@ -36,5 +40,10 @@ class Category extends Model
     public function directories()
     {
         return $this->morphedByMany(Directory::class, 'categorizable');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return env('APP_URL').'/storage/images/category/'.$this->image_code;
     }
 }

@@ -18,8 +18,17 @@ class Picture extends Model
         'taken_at',
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
     public function categories()
     {
         return $this->morphToMany(Category::class, 'categorizable');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return env('APP_URL').'/storage/images/picture/'.$this->image_code;
     }
 }
