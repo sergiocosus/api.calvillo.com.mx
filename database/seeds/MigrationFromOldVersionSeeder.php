@@ -106,7 +106,6 @@ class MigrationFromOldVersionSeeder extends Seeder
         $this->migrateDirectories();
 
         $mainCategory = new \CalvilloComMx\Core\Category();
-        $mainCategory = new \CalvilloComMx\Core\Category();
         $mainCategory->link = '';
         $mainCategory->description = '';
         $mainCategory->title = '';
@@ -177,7 +176,7 @@ class MigrationFromOldVersionSeeder extends Seeder
 
             try {
                 Storage::disk('public')->copy(
-                    "old_images/Foto/$localidad->id.$localidad->formato",
+                    "old_images/Localidad/$localidad->id.$localidad->formato",
                     "images/category/$locality->image_code");
                 $this->imageResizeService->resize('./storage/app/public/images/category/'.$locality->image_code);
 
@@ -233,9 +232,6 @@ class MigrationFromOldVersionSeeder extends Seeder
             }
         }
 
-
-
-
         foreach($directorios as $directorio) {
             $directory = new \CalvilloComMx\Core\Directory();
             $directory->title =  $directorio->titulo;
@@ -249,8 +245,8 @@ class MigrationFromOldVersionSeeder extends Seeder
             $directory->website_url = $directorio->website;
             $directory->facebook_url = $directorio->facebook;
             $directory->youtube_url = $directorio->youtube;
-            $directory->latitude = $directorio->latitud;
-            $directory->longitude = $directorio->longitud;
+            $directory->latitude = $directorio->longitud;
+            $directory->longitude = $directorio->latitud;
 
             if (!$directorio->visible) {
                 $directory->deleted_at = \Carbon\Carbon::now() ;

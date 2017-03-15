@@ -12,7 +12,7 @@ class CategorySeeder extends Seeder
     public function run()
     {
         \CalvilloComMx\Core\Category::create([
-            'title' => 'Main Category',
+            'title' => 'Categoría Principal',
             'image_code' => '',
             'description' => '',
             'priority' => 0,
