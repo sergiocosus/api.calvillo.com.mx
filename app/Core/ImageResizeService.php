@@ -9,9 +9,9 @@
 namespace CalvilloComMx\Core;
 
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Http\File;
 use Intervention\Image\ImageManager;
+use Storage;
 
 class ImageResizeService
 {
@@ -36,8 +36,31 @@ class ImageResizeService
         $this->imageManager = $imageManager;
     }
 
+    public function saveAndResizeImagesFromBase64(string $base64File, string $path) {
+        $image_code = uniqid();
+        $decoded_data = base64_decode($base64File);
+        $tempFilename = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $image_code;
+        file_put_contents($tempFilename, $decoded_data);
+
+        $this->resizeAndSaveOnStorage($tempFilename, $path);
+
+        return $image_code;
+    }
+
+    public function resizeAndSaveOnStorage($tempFilename, $path)
+    {
+        $createdImagesPath = $this->resize($tempFilename);
+
+        foreach ($createdImagesPath as $createdImagePath) {
+            echo $basename = basename($createdImagePath);
+            Storage::disk('public')->putFileAs("images/$path", new File($createdImagePath), $basename);
+        }
+    }
+
     public function resize($path, $watermark = false)
     {
+        $createdImagesPath = [$path];
+
         foreach ($this->sizes as $name => $size) {
             $image = $this->imageManager->make($path);
             if ($watermark) {
@@ -48,6 +71,9 @@ class ImageResizeService
                 $constraint->upsize();
             });
             $image->save($path . '_' . $name);
+            $createdImagesPath[] = $path . '_' . $name;
         }
+
+        return $createdImagesPath;
     }
 }

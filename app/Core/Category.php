@@ -11,6 +11,7 @@ class Category extends Model
         'link',
         'image_code',
         'description',
+        'category_id',
         'priority',
     ];
 
