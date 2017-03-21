@@ -2,8 +2,10 @@
 
 namespace CalvilloComMx\Providers;
 
+use CalvilloComMx\Core\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,15 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
+
+        Passport::routes();
+        Route::bind('user', function ($value) {
+            if ($value == 'me') {
+                return \Auth::user();
+            } else {
+                return User::whereKey($value)->firstOrFail();
+            }
+        });
     }
 
     /**
