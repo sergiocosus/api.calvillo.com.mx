@@ -29,7 +29,7 @@ class CategoryService
 
     public function create($data)
     {
-        $data['image_code'] = $this->imageResizeService->resize($data['image'], 'category');
+        $data['image_code'] = $this->imageResizeService->saveAndResizeImagesFromBase64($data['image'], 'category');
 
         $category = Category::create($data);
 

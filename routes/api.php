@@ -24,6 +24,7 @@ Route::group(['prefix' => 'picture'], function() {
 });
 
 Route::group(['prefix' => 'category'], function() {
+    Route::post('', 'CategoryController@post');
     Route::get('{category}', 'CategoryController@get');
 });
 

@@ -52,7 +52,7 @@ class ImageResizeService
         $createdImagesPath = $this->resize($tempFilename);
 
         foreach ($createdImagesPath as $createdImagePath) {
-            echo $basename = basename($createdImagePath);
+            $basename = basename($createdImagePath);
             Storage::disk('public')->putFileAs("images/$path", new File($createdImagePath), $basename);
         }
     }
