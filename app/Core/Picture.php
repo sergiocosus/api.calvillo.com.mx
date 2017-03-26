@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Picture extends Model
 {
-    // For images code uniqid()
+    use ISODateFormatSerializeDate;
 
     protected $fillable = [
         'title',
@@ -21,6 +21,8 @@ class Picture extends Model
     protected $appends = [
         'image_url',
     ];
+
+    protected $dates = ['taken_at'];
 
     public function categories()
     {

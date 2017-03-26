@@ -29,7 +29,7 @@ class DirectoryService
 
     public function create($data)
     {
-        $data['image_code'] = $this->imageResizeService->resize($data['image'], 'picture');
+        $data['image_code'] = $this->imageResizeService->saveAndResizeImagesFromBase64($data['image'], 'directory');
 
         $directory = Directory::create($data);
 

@@ -22,6 +22,11 @@ class PictureController extends Controller
 
     public function post(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'taken_at' => 'nullable|date',
+        ]);
+
         $picture = $this->pictureService->create(
             $request->all()
         );

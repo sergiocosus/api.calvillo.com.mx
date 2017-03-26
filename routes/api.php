@@ -21,6 +21,7 @@ Route::group([
 
 
 Route::group(['prefix' => 'picture'], function() {
+    Route::post('', 'PictureController@post');
 });
 
 Route::group(['prefix' => 'category'], function() {

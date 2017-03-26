@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Directory extends Model
 {
+    use ISODateFormatSerializeDate;
+
     protected $fillable = [
         'title',
         'link',

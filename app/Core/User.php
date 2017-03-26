@@ -9,6 +9,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use \Laravel\Passport\HasApiTokens;
+    use ISODateFormatSerializeDate;
 
     /**
      * The attributes that are mass assignable.

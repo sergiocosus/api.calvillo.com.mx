@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model
 {
+    use ISODateFormatSerializeDate;
+
     protected $fillable = [
         'title',
         'link',
