@@ -2,9 +2,11 @@
 
 namespace CalvilloComMx\Exceptions;
 
+use CalvilloComMx\Http\Response;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,34 +46,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->wantsJson())
-        {
-            // Define the response
-            $response = [
-                'errors' => 'Sorry, something went wrong.'
-            ];
+        if ($request->wantsJson()) {
+            $message = 'Sorry, something went wrong.';
 
-            // If the app is in debug mode
-            if (config('app.debug'))
-            {
-                // Add the exception class name, message and stack trace to response
-                $response['exception'] = get_class($exception); // Reflection might be better here
-                $response['message'] = $exception->getMessage();
-                $response['trace'] = $exception->getTrace();
+            if (config('app.debug')) {
+                $message = $exception->getMessage();
+                $trace = $exception->getTrace();
             }
 
-            // Default response of 400
             $status = 400;
 
-            // If this exception is an instance of HttpException
-            if ($this->isHttpException($exception))
-            {
-                // Grab the HTTP status code from the Exception
+            if ($this->isHttpException($exception)) {
                 $status = $exception->getStatusCode();
             }
 
-            // Return a JSON response with the response array and status code
-            return response()->json($response, $status);
+            if ($exception instanceof ValidationException) {
+                $message = implode(',', $exception->validator->errors()->all());
+            }
+
+            return Response::error($status, $message, compact('trace'));
         }
 
         return parent::render($request, $exception);
