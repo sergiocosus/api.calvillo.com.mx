@@ -3,6 +3,7 @@
 namespace CalvilloComMx\Http\Controllers;
 
 use CalvilloComMx\Core\Category;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -11,14 +12,20 @@ class CategoryController extends Controller
      * @var Category\CategoryService
      */
     private $categoryService;
+    /**
+     * @var \Auth
+     */
+    private $auth;
 
 
     /**
      * CategoryController constructor.
      */
-    public function __construct(Category\CategoryService $categoryService)
+    public function __construct(Category\CategoryService $categoryService,
+                                AuthManager $auth)
     {
         $this->categoryService = $categoryService;
+        $this->auth = $auth;
     }
 
     public function get(Category $category)
@@ -30,6 +37,12 @@ class CategoryController extends Controller
             'videos',
             'directories'
         ]);
+
+        if ($this->auth->check()) {
+            $category->load([
+                'deletedPictures'
+            ]);
+        }
 
         return $this->success(compact('category'));
     }

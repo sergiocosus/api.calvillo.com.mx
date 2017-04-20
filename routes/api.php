@@ -20,10 +20,15 @@ Route::group([
 });
 
 
-Route::group(['prefix' => 'picture'], function() {
+Route::group([
+    'prefix' => 'picture',
+    'middleware' => 'auth:api'], function() {
     Route::post('', 'PictureController@post');
+    Route::delete('{picture}', 'PictureController@delete');
+    Route::patch('{picture_id}', 'PictureController@patch');
+    Route::delete('force/{picture_id}', 'PictureController@deleteForce');
+    Route::get('link-exists', 'PictureController@getLinkExists');
 });
-
 Route::group(['prefix' => 'category'], function() {
     Route::post('', 'CategoryController@post');
     Route::get('{category}', 'CategoryController@get');

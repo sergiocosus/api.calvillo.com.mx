@@ -35,6 +35,11 @@ class Category extends Model
         return $this->morphedByMany(Picture::class, 'categorizable');
     }
 
+    public function deletedPictures()
+    {
+        return $this->pictures()->onlyTrashed();
+    }
+
     public function videos()
     {
         return $this->morphedByMany(Video::class, 'categorizable');

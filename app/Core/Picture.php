@@ -3,10 +3,12 @@
 namespace CalvilloComMx\Core;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Picture extends Model
 {
     use ISODateFormatSerializeDate;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -23,6 +25,10 @@ class Picture extends Model
     ];
 
     protected $dates = ['taken_at'];
+
+    protected $attributes = array(
+        'description' => '',
+    );
 
     public function categories()
     {
