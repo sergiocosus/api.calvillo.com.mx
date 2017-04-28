@@ -37,6 +37,21 @@ class PictureController extends Controller
         return $this->success(compact('picture'));
     }
 
+    public function put(Picture $picture, Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'link' => 'required|max:255',
+            'taken_at' => 'nullable|date',
+        ]);
+
+        $picture = $this->pictureService->put(
+            $picture, $request->all()
+        );
+
+        return $this->success(compact('picture'));
+    }
+
     public function delete(Picture $picture)
     {
         $picture->delete();

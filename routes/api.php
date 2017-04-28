@@ -24,6 +24,7 @@ Route::group([
     'prefix' => 'picture',
     'middleware' => 'auth:api'], function() {
     Route::post('', 'PictureController@post');
+    Route::put('{picture}', 'PictureController@put');
     Route::delete('{picture}', 'PictureController@delete');
     Route::patch('{picture_id}', 'PictureController@patch');
     Route::delete('force/{picture_id}', 'PictureController@deleteForce');
@@ -31,6 +32,7 @@ Route::group([
 });
 Route::group(['prefix' => 'category'], function() {
     Route::post('', 'CategoryController@post');
+    Route::get('newest', 'CategoryController@getNewest');
     Route::get('{category}', 'CategoryController@get');
 });
 

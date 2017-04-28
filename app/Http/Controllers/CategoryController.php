@@ -28,6 +28,8 @@ class CategoryController extends Controller
         $this->auth = $auth;
     }
 
+
+
     public function get(Category $category)
     {
         $category->load([
@@ -54,5 +56,15 @@ class CategoryController extends Controller
         );
 
         return $this->success(compact('category'));
+    }
+
+    public function getNewest(Request $request)
+    {
+        $elements = $request->get('elements', 50);
+
+        $categories = Category::orderBy('created_at', 'desc')
+            ->limit($elements)->get();
+
+        return $this->success(compact('categories'));
     }
 }

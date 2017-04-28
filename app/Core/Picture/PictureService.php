@@ -43,4 +43,19 @@ class PictureService
 
         return $picture;
     }
+
+    public function put(Picture $picture, $data)
+    {
+        if (isset($data['taken_at'])) {
+            $data['taken_at'] = new Carbon($data['taken_at']);
+        }
+
+        \DB::beginTransaction();
+        $picture = $picture->fill($data);
+        $picture->update();
+        //$picture->categories()->attach($data['category_id']);
+        \DB::commit();
+
+        return $picture;
+    }
 }
