@@ -138,14 +138,17 @@ class MigrationFromOldVersionSeeder extends Seeder
             if (!$categoria->visible) {
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
-            $category->save();
+            try{
+                $category->save();
+                Storage::disk('public')->copy(
+                    "old_images/LocalidadCat/$categoria->id.$categoria->formato",
+                    "images/category/$category->image_code");
+                $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
 
-            Storage::disk('public')->copy(
-                "old_images/LocalidadCat/$categoria->id.$categoria->formato",
-                "images/category/$category->image_code");
-            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
-
-            $categories[] = $category;
+                $categories[] = $category;
+            } catch (Exception $exception) {
+                Log::info($exception);
+            }
         }
 
         foreach ($categorias as $index => $categoria)    {
@@ -211,14 +214,19 @@ class MigrationFromOldVersionSeeder extends Seeder
             if (!$categoria->visible) {
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
-            $category->save();
+            try {
+                $category->save();
 
-            Storage::disk('public')->copy(
-                "old_images/DirectorioCat/$categoria->id.$categoria->formato",
-                "images/category/$category->image_code");
-            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
+                Storage::disk('public')->copy(
+                    "old_images/DirectorioCat/$categoria->id.$categoria->formato",
+                    "images/category/$category->image_code");
+                $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
 
-            $categories[] = $category;
+                $categories[] = $category;
+            } catch (Exception $exception) {
+                Log::error($exception);
+            }
+
         }
 
         foreach ($categorias as $index => $categoria)    {
