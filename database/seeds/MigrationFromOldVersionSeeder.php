@@ -132,23 +132,23 @@ class MigrationFromOldVersionSeeder extends Seeder
             $category->title = $categoria->titulo;
             $category->image_code = uniqid();
             $category->link = strtolower($categoria->link);
+            while(\CalvilloComMx\Core\Category::whereLink($category->link)->first()) {
+                $category->link .= '-';
+            }
             $category->description = $categoria->descripcion;
             $category->created_at = new Carbon\Carbon($categoria->fechaSubida,'America/Mexico_City');
             $category->title = $categoria->titulo;
             if (!$categoria->visible) {
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
-            try{
-                $category->save();
-                Storage::disk('public')->copy(
-                    "old_images/LocalidadCat/$categoria->id.$categoria->formato",
-                    "images/category/$category->image_code");
-                $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
 
-                $categories[] = $category;
-            } catch (Exception $exception) {
-                Log::info($exception);
-            }
+            $category->save();
+            Storage::disk('public')->copy(
+                "old_images/LocalidadCat/$categoria->id.$categoria->formato",
+                "images/category/$category->image_code");
+            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
+
+            $categories[] = $category;
         }
 
         foreach ($categorias as $index => $categoria)    {
@@ -208,25 +208,23 @@ class MigrationFromOldVersionSeeder extends Seeder
             $category->title = $categoria->titulo;
             $category->image_code = uniqid();
             $category->link = strtolower($categoria->link) . '_dir';
+            while(\CalvilloComMx\Core\Category::whereLink($category->link)->first()) {
+                $category->link .= '-';
+            }
             $category->description = $categoria->descripcion;
             $category->created_at = new Carbon\Carbon($categoria->fechaSubida,'America/Mexico_City');
             $category->title = $categoria->titulo;
             if (!$categoria->visible) {
                 $category->deleted_at = \Carbon\Carbon::now() ;
             }
-            try {
-                $category->save();
+            $category->save();
 
-                Storage::disk('public')->copy(
-                    "old_images/DirectorioCat/$categoria->id.$categoria->formato",
-                    "images/category/$category->image_code");
-                $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
+            Storage::disk('public')->copy(
+                "old_images/DirectorioCat/$categoria->id.$categoria->formato",
+                "images/category/$category->image_code");
+            $this->imageResizeService->resize('./storage/app/public/images/category/'.$category->image_code);
 
-                $categories[] = $category;
-            } catch (Exception $exception) {
-                Log::error($exception);
-            }
-
+            $categories[] = $category;
         }
 
         foreach ($categorias as $index => $categoria)    {
