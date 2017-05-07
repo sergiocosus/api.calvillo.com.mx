@@ -18,7 +18,7 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         \Illuminate\Auth\AuthenticationException::class,
         \Illuminate\Auth\Access\AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+       // \Symfony\Component\HttpKernel\Exception\HttpException::class,
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
@@ -46,28 +46,27 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->wantsJson()) {
-            $message = 'Sorry, something went wrong.';
+        $message = 'Sorry, something went wrong.';
 
-            if (config('app.debug')) {
-                $message = $exception->getMessage();
-                $trace = $exception->getTrace();
-            }
-
-            $status = 400;
-
-            if ($this->isHttpException($exception)) {
-                $status = $exception->getStatusCode();
-            }
-
-            if ($exception instanceof ValidationException) {
-                $message = implode(',', $exception->validator->errors()->all());
-            }
-
-            return Response::error($status, $message, compact('trace'));
+        if (config('app.debug')) {
+            $message = $exception->getMessage();
+            $trace = $exception->getTrace();
         }
 
-        return parent::render($request, $exception);
+        $status = 400;
+
+        if ($this->isHttpException($exception)) {
+            $message = \Request::getUri();
+            $status = $exception->getStatusCode();
+        }
+
+        if ($exception instanceof ValidationException) {
+            $message = implode(',', $exception->validator->errors()->all());
+        }
+
+        return Response::error($status, $message, compact('trace'));
+
+        //return parent::render($request, $exception);
     }
 
     /**

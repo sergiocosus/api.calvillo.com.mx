@@ -4,6 +4,7 @@ namespace CalvilloComMx\Http\Controllers;
 
 use CalvilloComMx\Core\Category;
 use Illuminate\Auth\AuthManager;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -28,8 +29,6 @@ class CategoryController extends Controller
         $this->auth = $auth;
     }
 
-
-
     public function get(Category $category)
     {
         $category->load([
@@ -44,6 +43,9 @@ class CategoryController extends Controller
             $category->load([
                 'deletedPictures'
             ]);
+            $category->load([
+                'deletedCategories'
+            ]);
         }
 
         return $this->success(compact('category'));
@@ -54,6 +56,49 @@ class CategoryController extends Controller
         $category = $this->categoryService->create(
             $request->all()
         );
+
+        return $this->success(compact('category'));
+    }
+
+    public function put(Category $category, Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'link' => 'required|max:255',
+        ]);
+
+        $category = $this->categoryService->put(
+            $category, $request->all()
+        );
+
+        return $this->success(compact('category'));
+    }
+
+    public function delete(Category $category)
+    {
+        $category->delete();
+
+        return $this->success(compact('category'));
+    }
+
+    public function deleteForce($category_id)
+    {
+        $category = Category::whereKey($category_id)->onlyTrashed()->first();
+        if (!$category) {
+            throw new ModelNotFoundException(Picture::class);
+        }
+        $category->forceDelete();
+
+        return $this->success();
+    }
+
+    public function patch($picture_id)
+    {
+        $category = Category::whereKey($picture_id)->onlyTrashed()->first();
+        if (!$category) {
+            throw new ModelNotFoundException(Category::class);
+        }
+        $category->restore();
 
         return $this->success(compact('category'));
     }

@@ -3,10 +3,12 @@
 namespace CalvilloComMx\Core;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
     use ISODateFormatSerializeDate;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -28,6 +30,11 @@ class Category extends Model
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+
+    public function deletedCategories()
+    {
+        return $this->categories()->onlyTrashed();
     }
 
     public function pictures()

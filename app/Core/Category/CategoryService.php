@@ -35,4 +35,21 @@ class CategoryService
 
         return $category;
     }
+
+    public function put(Category $category, $data)
+    {
+        \DB::beginTransaction();
+        $category = $category->fill($data);
+
+        if (isset($data['image'])) {
+            $category->image_code = $this->imageResizeService->saveAndResizeImagesFromBase64(
+                $data['image'], 'category'
+            );
+        }
+
+        $category->update();
+        //$picture->categories()->attach($data['category_id']);
+        \DB::commit();
+        return $category;
+    }
 }

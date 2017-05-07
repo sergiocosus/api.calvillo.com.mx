@@ -34,6 +34,11 @@ Route::group(['prefix' => 'category'], function() {
     Route::post('', 'CategoryController@post');
     Route::get('newest', 'CategoryController@getNewest');
     Route::get('{category}', 'CategoryController@get');
+
+    Route::put('{category}', 'CategoryController@put');
+    Route::delete('{category}', 'CategoryController@delete');
+    Route::patch('{category_id}', 'CategoryController@patch');
+    Route::delete('force/{category_id}', 'CategoryController@deleteForce');
 });
 
 Route::group(['prefix' => 'directory'], function() {
