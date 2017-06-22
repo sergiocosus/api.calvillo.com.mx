@@ -108,8 +108,10 @@ class CategoryController extends Controller
         $elements = $request->get('elements', 50);
 
         $categories = Category::orderBy('created_at', 'desc')
+            ->has('category')
+            ->with('pictures')
+            ->has('pictures', '>=',5)
             ->limit($elements)->get();
-
         return $this->success(compact('categories'));
     }
 }

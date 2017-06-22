@@ -51,7 +51,7 @@ class PictureService
         }
 
         \DB::beginTransaction();
-        $picture = $picture->fill($data);
+        $picture->fill($data);
         $picture->update();
         //$picture->categories()->attach($data['category_id']);
         \DB::commit();

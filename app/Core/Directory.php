@@ -3,10 +3,12 @@
 namespace CalvilloComMx\Core;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Directory extends Model
 {
     use ISODateFormatSerializeDate;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',

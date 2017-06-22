@@ -35,4 +35,27 @@ class DirectoryService
 
         return $directory;
     }
+
+    public function put(Directory $directory, $data)
+    {
+        if (isset($data['taken_at'])) {
+            $data['taken_at'] = new Carbon($data['taken_at']);
+        }
+
+        \DB::beginTransaction();
+        $directory->fill($data);
+
+        if (isset($data['image'])) {
+            $directory->image_code = $this->imageResizeService->saveAndResizeImagesFromBase64(
+                $data['image'], 'directory'
+            );
+        }
+
+        $directory->update();
+
+        \DB::commit();
+
+        return $directory;
+    }
+
 }
