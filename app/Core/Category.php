@@ -57,6 +57,11 @@ class Category extends Model
         return $this->morphedByMany(Directory::class, 'categorizable');
     }
 
+    public function deletedDirectories()
+    {
+        return $this->directories()->onlyTrashed();
+    }
+
     public function getImageUrlAttribute()
     {
         return env('APP_URL').'/storage/images/category/'.$this->image_code;

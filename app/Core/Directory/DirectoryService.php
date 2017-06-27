@@ -31,7 +31,10 @@ class DirectoryService
     {
         $data['image_code'] = $this->imageResizeService->saveAndResizeImagesFromBase64($data['image'], 'directory');
 
+        \DB::beginTransaction();
         $directory = Directory::create($data);
+        $directory->categories()->attach($data['category_id']);
+        \DB::commit();
 
         return $directory;
     }

@@ -41,9 +41,8 @@ class CategoryController extends Controller
 
         if ($this->auth->check()) {
             $category->load([
-                'deletedPictures'
-            ]);
-            $category->load([
+                'deletedPictures',
+                'deletedDirectories',
                 'deletedCategories'
             ]);
         }

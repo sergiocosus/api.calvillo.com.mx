@@ -42,7 +42,14 @@ Route::group(['prefix' => 'category'], function() {
 });
 
 Route::group(['prefix' => 'directory'], function() {
+    Route::post('', 'DirectoryController@post');
+    Route::get('newest', 'DirectoryController@getNewest');
+    Route::get('{directory}', 'DirectoryController@get');
 
+    Route::put('{directory}', 'DirectoryController@put');
+    Route::delete('{directory}', 'DirectoryController@delete');
+    Route::patch('{directory_id}', 'DirectoryController@patch');
+    Route::delete('force/{directory_id}', 'DirectoryController@deleteForce');
 });
 
 Route::group(['prefix' => 'video'], function() {

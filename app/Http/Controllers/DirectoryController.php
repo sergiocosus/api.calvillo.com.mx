@@ -39,7 +39,7 @@ class DirectoryController extends Controller
             'link' => 'required|max:255',
         ]);
 
-        $directory = $this->categoryService->put(
+        $directory = $this->directoryService->put(
             $directory, $request->all()
         );
 
