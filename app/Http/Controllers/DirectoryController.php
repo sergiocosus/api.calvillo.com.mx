@@ -22,6 +22,13 @@ class DirectoryController extends Controller
         $this->directoryService = $directoryService;
     }
 
+    public function getAll()
+    {
+        $directories = Directory::get();
+
+        return $this->success(compact('directories'));
+    }
+
     public function post(Request $request)
     {
         $directory = $this->directoryService->create(

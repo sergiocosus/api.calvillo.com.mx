@@ -42,6 +42,7 @@ Route::group(['prefix' => 'category'], function() {
 });
 
 Route::group(['prefix' => 'directory'], function() {
+    Route::get('', 'DirectoryController@getAll');
     Route::post('', 'DirectoryController@post');
     Route::get('newest', 'DirectoryController@getNewest');
     Route::get('{directory}', 'DirectoryController@get');

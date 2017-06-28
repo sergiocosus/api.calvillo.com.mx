@@ -35,7 +35,6 @@ class Directory extends Model
         return $this->morphToMany(Category::class, 'categorizable');
     }
 
-
     public function getImageUrlAttribute()
     {
         return env('APP_URL').'/storage/images/directory/'.$this->image_code;
