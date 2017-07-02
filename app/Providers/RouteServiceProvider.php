@@ -2,6 +2,7 @@
 
 namespace CalvilloComMx\Providers;
 
+use CalvilloComMx\Core\Category;
 use CalvilloComMx\Core\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -36,6 +37,10 @@ class RouteServiceProvider extends ServiceProvider
             } else {
                 return User::whereKey($value)->firstOrFail();
             }
+        });
+
+        Route::bind('category_link', function ($value) {
+            return Category::whereLink($value)->firstOrFail();
         });
     }
 

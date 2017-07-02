@@ -34,6 +34,7 @@ Route::group(['prefix' => 'category'], function() {
     Route::post('', 'CategoryController@post');
     Route::get('newest', 'CategoryController@getNewest');
     Route::get('{category}', 'CategoryController@get');
+    Route::get('link/{category_link}', 'CategoryController@get');
 
     Route::put('{category}', 'CategoryController@put');
     Route::delete('{category}', 'CategoryController@delete');
