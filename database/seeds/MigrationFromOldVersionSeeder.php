@@ -106,7 +106,7 @@ class MigrationFromOldVersionSeeder extends Seeder
         $this->migrateDirectories();
 
         $mainCategory = new \CalvilloComMx\Core\Category();
-        $mainCategory->link = '';
+        $mainCategory->link = 'principal';
         $mainCategory->description = '';
         $mainCategory->title = '';
         $mainCategory->image_code = '';

@@ -2,11 +2,14 @@
 
 namespace CalvilloComMx\Exceptions;
 
+use CalvilloComMx\Core\Category;
 use CalvilloComMx\Http\Response;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Lang;
 
 class Handler extends ExceptionHandler
 {
@@ -62,6 +65,13 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ValidationException) {
             $message = implode(',', $exception->validator->errors()->all());
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            switch($exception->getModel()){
+                case Category::class:
+                    return Response::error(1001, Lang::get('category.not_found'));
+            }
         }
 
         return Response::error($status, $message, compact('trace'));
