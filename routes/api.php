@@ -31,6 +31,7 @@ Route::group([
     Route::get('link-exists', 'PictureController@getLinkExists');
 });
 Route::group(['prefix' => 'category'], function() {
+    Route::get('', 'CategoryController@getAll');
     Route::post('', 'CategoryController@post');
     Route::get('newest', 'CategoryController@getNewest');
     Route::get('{category}', 'CategoryController@get');

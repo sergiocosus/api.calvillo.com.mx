@@ -29,21 +29,32 @@ class CategoryController extends Controller
         $this->auth = $auth;
     }
 
+    public function getAll() {
+        $categories = Category::with('category')
+            ->select('categories.*')
+            ->join('categories as parentCategory', 'categories.category_id', '=', 'parentCategory.id')
+            ->orderBy('parentCategory.title')
+            ->orderBy('categories.title')->get();
+
+        return $this->success(compact('categories'));
+    }
+
     public function get(Category $category)
     {
         $category->load([
             'category',
             'categories',
-            'pictures',
             'videos',
-            'directories'
+            'directories',
+            'pictures',
         ]);
 
         if ($this->auth->check()) {
             $category->load([
                 'deletedPictures',
                 'deletedDirectories',
-                'deletedCategories'
+                'deletedCategories',
+                'pictures.categories',
             ]);
         }
 

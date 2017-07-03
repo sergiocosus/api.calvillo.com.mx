@@ -38,7 +38,7 @@ class PictureService
 
         \DB::beginTransaction();
         $picture = Picture::create($data);
-        $picture->categories()->attach($data['category_id']);
+        $picture->categories()->attach($data['categories']);
         \DB::commit();
 
         return $picture;
@@ -53,7 +53,7 @@ class PictureService
         \DB::beginTransaction();
         $picture->fill($data);
         $picture->update();
-        //$picture->categories()->attach($data['category_id']);
+        $picture->categories()->sync($data['categories']);
         \DB::commit();
 
         return $picture;

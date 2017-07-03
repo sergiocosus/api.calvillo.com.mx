@@ -48,7 +48,6 @@ class CategoryService
         }
 
         $category->update();
-        //$picture->categories()->attach($data['category_id']);
         \DB::commit();
         return $category;
     }

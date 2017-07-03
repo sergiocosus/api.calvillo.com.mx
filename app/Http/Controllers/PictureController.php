@@ -28,6 +28,7 @@ class PictureController extends Controller
             'title' => 'required|max:255',
             'link' => 'required|unique:pictures|max:255',
             'taken_at' => 'nullable|date',
+            'categories' => 'required|array',
         ]);
 
         $picture = $this->pictureService->create(
@@ -43,6 +44,7 @@ class PictureController extends Controller
             'title' => 'required|max:255',
             'link' => 'required|max:255',
             'taken_at' => 'nullable|date',
+            'categories' => 'required|array',
         ]);
 
         $picture = $this->pictureService->put(
