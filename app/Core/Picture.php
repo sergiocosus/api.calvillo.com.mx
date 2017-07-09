@@ -9,6 +9,7 @@ class Picture extends Model
 {
     use ISODateFormatSerializeDate;
     use SoftDeletes;
+    use ImageUrlTrait;
 
     protected $fillable = [
         'title',
@@ -37,6 +38,7 @@ class Picture extends Model
 
     public function getImageUrlAttribute()
     {
-        return env('APP_URL').'/storage/images/picture/'.$this->image_code;
+        return $this->getImageUrl('images/picture/'.$this->image_code);
     }
+
 }

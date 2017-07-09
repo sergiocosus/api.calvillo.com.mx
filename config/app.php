@@ -169,7 +169,7 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Tinker\TinkerServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
-
+        Aws\Laravel\AwsServiceProvider::class,
         //
 
         /*
@@ -230,7 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Image' => Intervention\Image\Facades\Image::class,
-
+        'AWS' => Aws\Laravel\AwsFacade::class,
     ],
 
 ];

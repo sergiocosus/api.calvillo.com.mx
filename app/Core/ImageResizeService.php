@@ -11,6 +11,7 @@ namespace CalvilloComMx\Core;
 
 use Illuminate\Http\File;
 use Intervention\Image\ImageManager;
+use Mockery\Exception;
 use Storage;
 
 class ImageResizeService
@@ -33,6 +34,13 @@ class ImageResizeService
      */
     public function __construct(ImageManager $imageManager)
     {
+
+        $s3 = \AWS::createClient('s3');
+        $s3->putObject(array(
+            'Bucket'     => 'calvillo.com.mx',
+            'Key'        => 'test',
+            'SourceFile' => '/home/sergio/Downloads/music-player (1).png',
+        ));
         $this->imageManager = $imageManager;
     }
 
@@ -53,7 +61,15 @@ class ImageResizeService
 
         foreach ($createdImagesPath as $createdImagePath) {
             $basename = basename($createdImagePath);
-            Storage::disk('public')->putFileAs("images/$path", new File($createdImagePath), $basename);
+            if (env('STORAGE_LOCATION') == 's3') {
+                Storage::disk('s3')->putFileAs("images/$path", new File($createdImagePath), $basename,
+                    ['ACL' => 'public-read']
+                );
+            } else {
+                Storage::disk('public')->putFileAs("images/$path", new File($createdImagePath), $basename);
+            }
+
+
         }
     }
 
@@ -75,5 +91,58 @@ class ImageResizeService
         }
 
         return $createdImagesPath;
+    }
+
+
+    public function migrateToS3()
+    {
+        $this->migrateCategories();
+        $this->migrateDirectories();
+        $this->migratePictures();
+    }
+
+    public function migrateCategories()
+    {
+        Directory::chunk(10, function($directories) {
+            foreach($directories as $directory) {
+                $this->transferAllSizes('images/category/'. $directory->image_code);
+            }
+        });
+    }
+
+    public function migrateDirectories()
+    {
+        Directory::chunk(10, function($directories) {
+            foreach($directories as $directory) {
+                $this->transferAllSizes('images/directory/'. $directory->image_code);
+            }
+        });
+    }
+
+    public function migratePictures()
+    {
+        Picture::chunk(10, function($pictures) {
+            foreach($pictures as $picture) {
+                $this->transferAllSizes('images/picture/'. $picture->image_code);
+            }
+        });
+    }
+
+    public function transferAllSizes($key)
+    {
+        try {
+            $this->transfer($key);
+            foreach ($this->sizes as $keySize => $width) {
+                $this->transfer($key.'_'.$keySize);
+            }
+        } catch(Exception $exception) {
+            \Log::error($exception);
+        }
+    }
+
+    public function transfer($key) {
+        $file = Storage::disk('public')->get($key);
+        Storage::disk('s3')->put($key, $file,
+            ['ACL' => 'public-read']);
     }
 }
