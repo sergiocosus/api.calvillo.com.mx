@@ -34,13 +34,6 @@ class ImageResizeService
      */
     public function __construct(ImageManager $imageManager)
     {
-
-        $s3 = \AWS::createClient('s3');
-        $s3->putObject(array(
-            'Bucket'     => 'calvillo.com.mx',
-            'Key'        => 'test',
-            'SourceFile' => '/home/sergio/Downloads/music-player (1).png',
-        ));
         $this->imageManager = $imageManager;
     }
 
