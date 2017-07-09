@@ -96,7 +96,7 @@ class ImageResizeService
 
     public function migrateCategories()
     {
-        Directory::chunk(10, function($directories) {
+        Category::chunk(10, function($directories) {
             foreach($directories as $directory) {
                 $this->transferAllSizes('images/category/'. $directory->image_code);
             }
