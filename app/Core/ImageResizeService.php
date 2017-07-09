@@ -95,7 +95,7 @@ class ImageResizeService
 
     public function migrateCategories()
     {
-        Category::chunk(10, function($directories) {
+        Category::withTrashed()->chunk(10, function($directories) {
             foreach($directories as $directory) {
                 $this->transferAllSizes('images/category/'. $directory->image_code);
             }
@@ -104,7 +104,7 @@ class ImageResizeService
 
     public function migrateDirectories()
     {
-        Directory::chunk(10, function($directories) {
+        Directory::withTrashed()->chunk(10, function($directories) {
             foreach($directories as $directory) {
                 $this->transferAllSizes('images/directory/'. $directory->image_code);
             }
@@ -113,7 +113,7 @@ class ImageResizeService
 
     public function migratePictures()
     {
-        Picture::chunk(10, function($pictures) {
+        Picture::withTrashed()->chunk(10, function($pictures) {
             foreach($pictures as $picture) {
                 $this->transferAllSizes('images/picture/'. $picture->image_code);
             }
