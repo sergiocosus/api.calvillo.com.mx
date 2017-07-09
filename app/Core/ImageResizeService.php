@@ -11,7 +11,6 @@ namespace CalvilloComMx\Core;
 
 use Illuminate\Http\File;
 use Intervention\Image\ImageManager;
-use Mockery\Exception;
 use Storage;
 
 class ImageResizeService
@@ -128,7 +127,7 @@ class ImageResizeService
             foreach ($this->sizes as $keySize => $width) {
                 $this->transfer($key.'_'.$keySize);
             }
-        } catch(Exception $exception) {
+        } catch(\Exception $exception) {
             \Log::error($exception);
         }
     }
