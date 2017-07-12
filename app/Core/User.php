@@ -2,6 +2,7 @@
 
 namespace CalvilloComMx\Core;
 
+use CalvilloComMx\Core\User\SocialToken;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -28,4 +29,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function socialToken()
+    {
+        return $this->hasOne(SocialToken::class);
+    }
 }

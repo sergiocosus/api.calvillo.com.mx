@@ -2,6 +2,7 @@
 
 namespace CalvilloComMx\Http\Controllers;
 
+use CalvilloComMx\Core\Category;
 use CalvilloComMx\Core\Picture;
 use CalvilloComMx\Core\Picture\PictureService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -87,5 +88,12 @@ class PictureController extends Controller
         $exists = (boolean)Picture::whereLink($request->get('link'))->first(['id']);
 
         return $this->success(compact('exists'));
+    }
+
+    public function postFacebook(Picture $picture, Category $category, Request $request)
+    {
+        $facebook_post_id = $this->pictureService->postOnFacebook($picture, $category, $request->get('message'));
+
+        return $this->success(compact('facebook_post_id'));
     }
 }

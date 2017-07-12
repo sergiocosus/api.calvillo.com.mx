@@ -9,9 +9,11 @@
 namespace CalvilloComMx\Core\Picture;
 
 
+use CalvilloComMx\Core\Category;
 use CalvilloComMx\Core\ImageResizeService;
 use CalvilloComMx\Core\Picture;
 use Carbon\Carbon;
+use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
 class PictureService
 {
@@ -19,13 +21,18 @@ class PictureService
      * @var ImageResizeService
      */
     private $imageResizeService;
+    /**
+     * @var LaravelFacebookSdk
+     */
+    private $fb;
 
     /**
      * CategoryService constructor.
      */
-    public function __construct(ImageResizeService $imageResizeService)
+    public function __construct(ImageResizeService $imageResizeService, LaravelFacebookSdk $fb)
     {
         $this->imageResizeService = $imageResizeService;
+        $this->fb = $fb;
     }
 
     public function create($data)
@@ -58,4 +65,28 @@ class PictureService
 
         return $picture;
     }
+
+    public function postOnFacebook(Picture $picture, Category $category, $message) {
+        $facebookPageId = env('FACEBOOK_PAGE_ID');
+
+        if(!$socialToken = \Auth::user()->socialToken) {
+            throw new \Exception('No facebook token!');
+        }
+
+        $this->fb->setDefaultAccessToken($socialToken->facebook_access_token);
+        $res = $this->fb->get('/me/accounts/'.$facebookPageId);
+        $token = $res->getGraphEdge()->getField(0)->getField('access_token');
+        $this->fb->setDefaultAccessToken($token);
+
+        $url = "http://calvillo.com.mx/galeria/$category->link/foto/$picture->link";
+
+        \Log::info($picture->image_url);
+        $res = $this->fb->post("/$facebookPageId/photos/", [
+            'message'=>"$message \n$url",
+            'url' => $picture->image_url,
+        ]);
+
+        return $res->getDecodedBody()['id'];
+    }
+
 }

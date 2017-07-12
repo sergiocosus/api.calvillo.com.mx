@@ -17,6 +17,8 @@ Route::group([
     'prefix' => 'user',
     'middleware' => 'auth:api'], function() {
    Route::get('{user}', 'UserController@get');
+   Route::post('{user}/facebook-login', 'Auth\FacebookController@postLogin');
+   Route::get('{user}/facebook-status', 'Auth\FacebookController@getStatus');
 });
 
 
@@ -29,6 +31,7 @@ Route::group([
     Route::patch('{picture_id}', 'PictureController@patch');
     Route::delete('force/{picture_id}', 'PictureController@deleteForce');
     Route::get('link-exists', 'PictureController@getLinkExists');
+    Route::post('{picture}/facebook/{category}', 'PictureController@postFacebook');
 });
 Route::group(['prefix' => 'category'], function() {
     Route::get('', 'CategoryController@getAll');
