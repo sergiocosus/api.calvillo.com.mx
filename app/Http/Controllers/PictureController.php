@@ -92,7 +92,14 @@ class PictureController extends Controller
 
     public function postFacebook(Picture $picture, Category $category, Request $request)
     {
-        $facebook_post_id = $this->pictureService->postOnFacebook($picture, $category, $request->get('message'));
+        $this->validate($request, [
+            'message' => 'required|max:255',
+            'scheduled_publish_time' => 'nullable|date',
+        ]);
+
+        $facebook_post_id = $this->pictureService->postOnFacebook($picture, $category,
+            $request->only('message', 'scheduled_publish_time')
+        );
 
         return $this->success(compact('facebook_post_id'));
     }

@@ -66,8 +66,13 @@ class PictureService
         return $picture;
     }
 
-    public function postOnFacebook(Picture $picture, Category $category, $message) {
+    public function postOnFacebook(Picture $picture, Category $category, $data) {
+        $message = $data['message'];
+
+
+
         $facebookPageId = env('FACEBOOK_PAGE_ID');
+
 
         if(!$socialToken = \Auth::user()->socialToken) {
             throw new \Exception('No facebook token!');
@@ -81,10 +86,19 @@ class PictureService
         $url = "http://calvillo.com.mx/galeria/$category->link/foto/$picture->link";
 
         \Log::info($picture->image_url);
-        $res = $this->fb->post("/$facebookPageId/photos/", [
+
+        $requestData = [
             'message'=>"$message \n$url",
             'url' => $picture->image_url,
-        ]);
+        ];
+
+        if (isset($data['scheduled_publish_time'])) {
+            $requestData['scheduled_publish_time'] = (new Carbon($data['scheduled_publish_time']))->timestamp;
+            $requestData['published'] = false;
+        }
+
+
+        $res = $this->fb->post("/$facebookPageId/photos/", $requestData);
 
         return $res->getDecodedBody()['id'];
     }
