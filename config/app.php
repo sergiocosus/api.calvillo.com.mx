@@ -171,6 +171,8 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         SammyK\LaravelFacebookSdk\LaravelFacebookSdkServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
+        DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         //
 
         /*

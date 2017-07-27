@@ -14,7 +14,9 @@
         "laravel/passport": "^2.0",
         "aws/aws-sdk-php-laravel": "^3.1",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "sammyk/laravel-facebook-sdk": "^3.4"
+        "sammyk/laravel-facebook-sdk": "^3.4",
+        "laravel/scout": "^3.0",
+        "damiantw/laravel-scout-mysql-driver": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -22,7 +24,7 @@
         "phpunit/phpunit": "~5.7",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
-        "barryvdPh/laravel-ide-helper": "^2.2"
+        "barryvdh/laravel-ide-helper": "^2.2"
     },
     "autoload": {
         "classmap": [

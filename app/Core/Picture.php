@@ -4,12 +4,14 @@ namespace CalvilloComMx\Core;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Picture extends Model
 {
     use ISODateFormatSerializeDate;
     use SoftDeletes;
     use ImageUrlTrait;
+    use Searchable;
 
     protected $fillable = [
         'title',
@@ -30,6 +32,17 @@ class Picture extends Model
     protected $attributes = array(
         'description' => '',
     );
+
+
+    public function toSearchableArray()
+    {
+        $array = [
+            'title' => $this->title,
+            'description' => $this->description
+        ];
+
+        return $array;
+    }
 
     public function categories()
     {

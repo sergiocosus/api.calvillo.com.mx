@@ -62,5 +62,5 @@ Route::group(['prefix' => 'video'], function() {
 
 });
 
-
+Route::get('search', 'SearchController@get');
 

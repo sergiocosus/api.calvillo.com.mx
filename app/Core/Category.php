@@ -4,12 +4,14 @@ namespace CalvilloComMx\Core;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Category extends Model
 {
     use ISODateFormatSerializeDate;
     use SoftDeletes;
     use ImageUrlTrait;
+    use Searchable;
 
     protected $fillable = [
         'title',
@@ -23,6 +25,17 @@ class Category extends Model
     protected $appends = [
         'image_url',
     ];
+
+
+    public function toSearchableArray()
+    {
+        $array = [
+            'title' => $this->title,
+            'description' => $this->description
+        ];
+
+        return $array;
+    }
 
     public function category() {
         return $this->belongsTo(Category::class);
