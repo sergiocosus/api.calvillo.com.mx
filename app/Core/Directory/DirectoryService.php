@@ -33,7 +33,7 @@ class DirectoryService
 
         \DB::beginTransaction();
         $directory = Directory::create($data);
-        $directory->categories()->attach($data['category_id']);
+        $directory->categories()->attach($data['categories']);
         \DB::commit();
 
         return $directory;
@@ -55,7 +55,7 @@ class DirectoryService
         }
 
         $directory->update();
-
+        $directory->categories()->sync($data['categories']);
         \DB::commit();
 
         return $directory;

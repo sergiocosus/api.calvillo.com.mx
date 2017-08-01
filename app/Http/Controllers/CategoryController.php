@@ -55,6 +55,7 @@ class CategoryController extends Controller
                 'deletedDirectories',
                 'deletedCategories',
                 'pictures.categories',
+                'directories.categories',
             ]);
         }
 
