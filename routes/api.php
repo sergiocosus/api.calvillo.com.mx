@@ -39,6 +39,7 @@ Route::group(['prefix' => 'category'], function() {
     Route::get('newest', 'CategoryController@getNewest');
     Route::get('{category}', 'CategoryController@get');
     Route::get('link/{category_link}', 'CategoryController@get');
+    Route::get('link/{category_link}/sub-categories', 'CategoryController@getSubCategories');
 
     Route::put('{category}', 'CategoryController@put');
     Route::delete('{category}', 'CategoryController@delete');

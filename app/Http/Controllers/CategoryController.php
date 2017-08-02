@@ -62,6 +62,21 @@ class CategoryController extends Controller
         return $this->success(compact('category'));
     }
 
+    public function getSubCategories(Category $category)
+    {
+        $category->load([
+            'categories.category',
+            'categories.categories',
+            'categories.videos',
+            'categories.directories',
+            'categories.pictures',
+        ]);
+
+        $categories = $category->categories;
+
+        return $this->success(compact('categories'));
+    }
+
     public function post(Request $request)
     {
         $category = $this->categoryService->create(
