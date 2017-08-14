@@ -31,7 +31,8 @@ class Category extends Model
     {
         $array = [
             'title' => $this->title,
-            'description' => $this->description
+            'description' => $this->description,
+            'link' => $this->link,
         ];
 
         return $array;
