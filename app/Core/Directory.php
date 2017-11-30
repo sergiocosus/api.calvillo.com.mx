@@ -2,13 +2,11 @@
 
 namespace CalvilloComMx\Core;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
-class Directory extends Model
+class Directory extends BaseModel
 {
-    use ISODateFormatSerializeDate;
     use SoftDeletes;
     use ImageUrlTrait;
     use Searchable;

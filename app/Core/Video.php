@@ -2,11 +2,9 @@
 
 namespace CalvilloComMx\Core;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Video extends Model
+class Video extends BaseModel
 {
-    use ISODateFormatSerializeDate;
 
     protected $fillable = [
         'title',
