@@ -35,6 +35,7 @@ class PictureController extends Controller
         $picture = $this->pictureService->create(
             $request->all()
         );
+        $picture->load('categories');
 
         return $this->success(compact('picture'));
     }
@@ -51,6 +52,8 @@ class PictureController extends Controller
         $picture = $this->pictureService->put(
             $picture, $request->all()
         );
+
+        $picture->load('categories');
 
         return $this->success(compact('picture'));
     }
