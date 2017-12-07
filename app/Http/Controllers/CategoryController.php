@@ -140,4 +140,15 @@ class CategoryController extends Controller
             ->limit($elements)->get();
         return $this->success(compact('categories'));
     }
+
+    public function postFacebook(Category $category, Request $request)
+    {
+        $this->validate($request, [
+            'hours_interval' => 'required',
+        ]);
+
+        $facebook_post_ids = $this->categoryService
+            ->postLinksOfPicturesOnFacebook($request, $category);
+        return $this->success(compact('facebook_post_ids'));
+    }
 }

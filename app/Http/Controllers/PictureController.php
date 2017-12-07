@@ -100,9 +100,16 @@ class PictureController extends Controller
             'scheduled_publish_time' => 'nullable|date',
         ]);
 
-        $facebook_post_id = $this->pictureService->postOnFacebook($picture, $category,
-            $request->only('message', 'scheduled_publish_time')
-        );
+        if ($request->get('as_picture')) {
+            $facebook_post_id = $this->pictureService->postPictureOnFacebook($picture, $category,
+                $request->only('message', 'scheduled_publish_time')
+            );
+        } else {
+            $facebook_post_id = $this->pictureService->postLinkOnFacebook($picture, $category,
+                $request->only('message', 'scheduled_publish_time')
+            );
+        }
+
 
         return $this->success(compact('facebook_post_id'));
     }

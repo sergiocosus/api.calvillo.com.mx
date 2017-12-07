@@ -45,6 +45,8 @@ Route::group(['prefix' => 'category'], function() {
     Route::delete('{category}', 'CategoryController@delete');
     Route::patch('{category_id}', 'CategoryController@patch');
     Route::delete('force/{category_id}', 'CategoryController@deleteForce');
+    Route::post('{category}/facebook', 'CategoryController@postFacebook');
+
 });
 
 Route::group(['prefix' => 'directory'], function() {

@@ -12,6 +12,7 @@ namespace CalvilloComMx\Core\Picture;
 use CalvilloComMx\Core\Category;
 use CalvilloComMx\Core\ImageResizeService;
 use CalvilloComMx\Core\Picture;
+use CalvilloComMx\Core\Social\FacebookPageService;
 use Carbon\Carbon;
 use SammyK\LaravelFacebookSdk\LaravelFacebookSdk;
 
@@ -22,17 +23,18 @@ class PictureService
      */
     private $imageResizeService;
     /**
-     * @var LaravelFacebookSdk
+    /**
+     * @var FacebookPageService
      */
-    private $fb;
+    private $fbp;
 
     /**
      * CategoryService constructor.
      */
-    public function __construct(ImageResizeService $imageResizeService, LaravelFacebookSdk $fb)
+    public function __construct(ImageResizeService $imageResizeService, FacebookPageService $fbp)
     {
         $this->imageResizeService = $imageResizeService;
-        $this->fb = $fb;
+        $this->fbp = $fbp;
     }
 
     public function create($data)
@@ -66,41 +68,25 @@ class PictureService
         return $picture;
     }
 
-    public function postOnFacebook(Picture $picture, Category $category, $data) {
-        $message = $data['message'];
+    public function postPictureOnFacebook(Picture $picture, Category $category, $data)
+    {
+        $this->fbp->init();
+        return $this->fbp->postPhoto(
+            $data['message'],
+            "http://calvillo.com.mx/galeria/$category->link/foto/$picture->link",
+            $picture->image_url,
+            new Carbon(array_get($data,'scheduled_publish_time'))
+        );
+    }
 
-
-
-        $facebookPageId = env('FACEBOOK_PAGE_ID');
-
-
-        if(!$socialToken = \Auth::user()->socialToken) {
-            throw new \Exception('No facebook token!');
-        }
-
-        $this->fb->setDefaultAccessToken($socialToken->facebook_access_token);
-        $res = $this->fb->get('/me/accounts/'.$facebookPageId);
-        $token = $res->getGraphEdge()->getField(0)->getField('access_token');
-        $this->fb->setDefaultAccessToken($token);
-
-        $url = "http://calvillo.com.mx/galeria/$category->link/foto/$picture->link";
-
-        \Log::info($picture->image_url);
-
-        $requestData = [
-            'message'=>"$message \n$url",
-            'url' => $picture->image_url,
-        ];
-
-        if (isset($data['scheduled_publish_time'])) {
-            $requestData['scheduled_publish_time'] = (new Carbon($data['scheduled_publish_time']))->timestamp;
-            $requestData['published'] = false;
-        }
-
-
-        $res = $this->fb->post("/$facebookPageId/photos/", $requestData);
-
-        return $res->getDecodedBody()['id'];
+    public function postLinkOnFacebook(Picture $picture, Category $category, $data)
+    {
+        $this->fbp->init();
+        return $this->fbp->postLink(
+            $data['message'],
+            "http://calvillo.com.mx/galeria/$category->link/foto/$picture->link",
+            new Carbon(array_get($data,'scheduled_publish_time'))
+        );
     }
 
 }
