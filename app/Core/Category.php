@@ -81,6 +81,10 @@ class Category extends BaseModel
     }
 
     public function getRelatedCategoriesAttribute() {
+    	if (!$this->category){
+    		return [];
+	    }
+
     	$relatedCategories = $this->category
 		    ->categories()
 		    ->where('id', '!=', $this->id)
