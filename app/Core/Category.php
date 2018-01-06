@@ -79,4 +79,18 @@ class Category extends BaseModel
     {
         return $this->getImageUrl('images/category/'.$this->image_code);
     }
+
+    public function getRelatedCategoriesAttribute() {
+    	$relatedCategories = $this->category
+		    ->categories()
+		    ->where('id', '!=', $this->id)
+		    ->orderByRaw('RAND()')
+		    ->limit(3)
+		    ->get();
+	    $randomCategory = Category::orderByRaw('RAND()')->first();
+
+	    $relatedCategories->push($randomCategory);
+
+	    return $relatedCategories;
+    }
 }

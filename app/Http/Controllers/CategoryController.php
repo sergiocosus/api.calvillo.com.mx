@@ -49,6 +49,8 @@ class CategoryController extends Controller
             'pictures',
         ]);
 
+        $category->append('related_categories');
+
         if ($this->auth->check()) {
             $category->load([
                 'deletedPictures',
