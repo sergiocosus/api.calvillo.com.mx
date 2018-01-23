@@ -52,4 +52,26 @@ class Directory extends BaseModel
     {
         return $this->getImageUrl('images/directory/'.$this->image_code);
     }
+
+
+	public function getRelatedDirectoriesAttribute() {
+		logger($this->id);
+
+		$relatedDirectories = $this->categories()->first()
+			->directories()
+			->where('id', '!=', $this->id)
+			->orderByRaw('RAND()')
+			->limit(3)
+			->get();
+
+		logger($relatedDirectories);
+
+
+		$randomDirectory = Directory::orderByRaw('RAND()')->first();
+		logger($randomDirectory);
+
+		$relatedDirectories->push($randomDirectory);
+
+		return $relatedDirectories;
+	}
 }

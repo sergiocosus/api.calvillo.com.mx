@@ -22,6 +22,13 @@ class DirectoryController extends Controller
         $this->directoryService = $directoryService;
     }
 
+	public function get( Directory $directory ) {
+		$directory->load('categories');
+		$directory->append('related_directories');
+
+		return $this->success(compact('directory'));
+    }
+
     public function getAll()
     {
         $directories = Directory::get();
