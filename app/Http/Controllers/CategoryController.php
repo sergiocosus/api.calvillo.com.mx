@@ -25,7 +25,7 @@ class CategoryController extends Controller
     public function __construct(Category\CategoryService $categoryService,
                                 AuthManager $auth)
     {
-        $this->categoryService = $categoryService;
+	    $this->categoryService = $categoryService;
         $this->auth = $auth;
     }
 
@@ -133,7 +133,9 @@ class CategoryController extends Controller
 
     public function getNewest(Request $request)
     {
-        $elements = $request->get('elements', 50);
+	    logger('holisdsdfasdfsf');
+
+	    $elements = $request->get('elements', 50);
 
         $categories = Category::orderBy('created_at', 'desc')
             ->has('category')
