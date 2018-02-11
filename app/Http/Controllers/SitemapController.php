@@ -79,7 +79,7 @@ class SitemapController extends Controller {
 		foreach ($category->pictures as $picture) {
 			$images = $this->processPicture($picture->image_url, $picture->title);
 
-			$this->sitemap->add($this->base.'galeria/'.$category->link . 'foto/' . $picture->link,
+			$this->sitemap->add($this->base.'galeria/'.$category->link . '/foto/' . $picture->link,
 				$picture->updated_at, null, null, $images, $picture->title);
 		}
 
@@ -89,8 +89,8 @@ class SitemapController extends Controller {
 				continue;
 			}
 
-			$images = $this->processPicture($category->image_url, $category->title);
-			$this->sitemap->add($this->base.'galeria/'.$childCategory->link, $childCategory->updated_at, null, null, $images, $category->title);
+			$images = $this->processPicture($childCategory->image_url, $childCategory->title);
+			$this->sitemap->add($this->base.'galeria/'.$childCategory->link, $childCategory->updated_at, null, null, $images, $childCategory->title);
 			$this->categoriesProcessed[] = $category->id;
 			$this->processCategory($childCategory);
 		}
