@@ -31,7 +31,6 @@ class RouteServiceProvider extends ServiceProvider
 
         parent::boot();
 
-        Passport::routes();
         Route::bind('user', function ($value) {
             if ($value == 'me') {
                 return \Auth::user();
@@ -95,6 +94,13 @@ class RouteServiceProvider extends ServiceProvider
             'prefix' => 'api',
         ], function ($router) {
             require base_path('routes/api.php');
+        });
+
+        Route::group([
+            'middleware' => 'api',
+            'prefix' => 'api',
+        ], function ($router) {
+            Passport::routes();
         });
     }
 }

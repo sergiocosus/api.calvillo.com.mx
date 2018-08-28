@@ -133,8 +133,6 @@ class CategoryController extends Controller
 
     public function getNewest(Request $request)
     {
-	    logger('holisdsdfasdfsf');
-
 	    $elements = $request->get('elements', 50);
 
         $categories = Category::orderBy('created_at', 'desc')

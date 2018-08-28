@@ -12,6 +12,7 @@ class Directory extends BaseModel
     use Searchable;
 
     protected $fillable = [
+        'type',
         'title',
         'link',
         'image_code',
@@ -23,6 +24,8 @@ class Directory extends BaseModel
         'website_url',
         'youtube_url',
         'facebook_url',
+        'twitter_url',
+        'schedule',
         'latitude',
         'longitude',
     ];
